@@ -1,13 +1,13 @@
 {
 	"name": "cl-crud2",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"description": "cool-admin: cl-crud、cl-form、cl-dialog",
 	"main": "dist/cl-crud2.min.js",
 	"scripts": {
 		"dist": "webpack --config webpack.config.js",
 		"dev": "webpack -w"
 	},
-	"author": "icssoa",
+	"author": "cool-team-official",
 	"license": "ISC",
 	"keywords": [
 		"crud",
@@ -16,7 +16,7 @@
 		"element-ui",
 		"upsert"
 	],
-	"homepage": "https://github.com/icssoa/cl-crud2",
+	"homepage": "https://github.com/cool-team-official/cl-crud2",
 	"files": [
 		"dist",
 		"src",
