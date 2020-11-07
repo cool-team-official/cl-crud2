@@ -79,39 +79,8 @@ export default function ({ __crud, __components }) {
 					saveButtonText: "保存",
 					closeButtonText: "关闭"
 				},
-				table: {
-					columns: []
-				},
 				event: {}
 			};
-		},
-
-		// Inject components
-		beforeCreate() {
-			for (let i in __components) {
-				const { beforeCreate } = __components[i];
-
-				__components[i].beforeCreate = function (flag) {
-					if (flag) {
-						return false;
-					}
-
-					this.$crud = {
-						...this.$crud,
-						...bootstrap(getParent.call(this, "ClCrud"))
-					};
-
-					if (beforeCreate) {
-						if (isArray(beforeCreate)) {
-							beforeCreate.map((e) => {
-								e.call(this, true);
-							});
-						} else {
-							beforeCreate.call(this, true);
-						}
-					}
-				};
-			}
 		},
 
 		created() {

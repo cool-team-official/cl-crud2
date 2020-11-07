@@ -33,6 +33,8 @@ yarn add cl-crud2
 
 ## Version
 
+-   0.2.9 优化
+-   0.2.8 优化
 -   0.2.7 解决 cl-form props 异常
 -   0.2.6 解决 cl-dialog 关闭异常问题
 -   0.2.5 过滤 cl-upsert, cl-form 事件(submit) hidden = true 的值

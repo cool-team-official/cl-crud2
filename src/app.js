@@ -1,9 +1,9 @@
-import { deepMerge, isFunction, cloneDeep } from "@/utils";
+import { deepMerge, isFunction } from "@/utils";
 import { __plugins, __inst } from "@/options";
 
 export const bootstrap = (that) => {
 	// eslint-disable-next-line
-	const { conf, refresh, params, event, id, fn, upsert, table } = that;
+	const { conf, refresh, event, id, fn } = that;
 
 	const app = {
 		refresh(d) {
