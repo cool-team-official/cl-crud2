@@ -6,7 +6,7 @@ import * as comps from "./components";
 require("./common");
 
 export const CRUD = {
-	version: "1.0.0",
+	version: "1.0.1",
 
 	install: function (Vue, options) {
 		const { crud, components, plugins } = options || {};

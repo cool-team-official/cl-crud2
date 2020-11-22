@@ -1,6 +1,5 @@
 import Emitter from "@/mixins/emitter";
 import { __inst } from "@/options";
-import Form from "@/utils/form";
 
 export default {
 	name: "cl-upsert",
@@ -76,10 +75,9 @@ export default {
 		this.$on("crud.append", this.append);
 		this.$on("crud.edit", this.edit);
 		this.$on("crud.close", this.close);
-
-		Form.inject.call(this, {
-			form: this.form
-		});
+	},
+	mounted() {
+		this.inject();
 	},
 	methods: {
 		add() {
@@ -294,6 +292,24 @@ export default {
 			} else {
 				next(data);
 			}
+		},
+
+		// Inject form api
+		inject() {
+			const fns = [
+				"getForm",
+				"setForm",
+				"clearForm",
+				"setData",
+				"setOptions",
+				"toggleItem",
+				"hiddenItem",
+				"showItem"
+			];
+
+			fns.forEach((e) => {
+				this[e] = this.$refs["form"][e];
+			});
 		}
 	},
 
