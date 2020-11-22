@@ -1,5 +1,6 @@
 import Emitter from "@/mixins/emitter";
 import { __inst } from "@/options";
+import Form from "@/utils/form";
 
 export default {
 	name: "cl-upsert",
@@ -32,6 +33,10 @@ export default {
 			type: Array,
 			default: () => ["close", "save"]
 		},
+		// Op object
+		op: Object,
+		// Dialog header object
+		hdr: Object,
 		// Save button text
 		saveButtonText: {
 			type: String,
@@ -71,9 +76,10 @@ export default {
 		this.$on("crud.append", this.append);
 		this.$on("crud.edit", this.edit);
 		this.$on("crud.close", this.close);
-	},
-	mounted() {
-		this.inject();
+
+		Form.inject.call(this, {
+			form: this.form
+		});
 	},
 	methods: {
 		add() {
@@ -180,11 +186,14 @@ export default {
 					...this.props
 				},
 				op: {
-					...this.op,
 					hidden: this.hiddenOp,
 					layout: this.opList,
 					confirmButtonText: this.saveButtonText,
-					cancelButtonText: this.closeButtonText
+					cancelButtonText: this.closeButtonText,
+					...this.op
+				},
+				hdr: {
+					...this.hdr
 				},
 				on: {
 					open: (data, { done, close }) => {
@@ -285,23 +294,6 @@ export default {
 			} else {
 				next(data);
 			}
-		},
-
-		// Inject form api
-		inject() {
-			const fns = [
-				"getForm",
-				"setForm",
-				"setData",
-				"setOptions",
-				"toggleItem",
-				"hiddenItem",
-				"showItem"
-			];
-
-			fns.forEach((e) => {
-				this[e] = this.$refs["form"][e];
-			});
 		}
 	},
 

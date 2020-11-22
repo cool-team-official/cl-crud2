@@ -56,14 +56,13 @@ export default {
 			}
 		}
 	},
-	beforeCreate() {
-		Form.inject.call(this, {
-			form: this.form
-		});
-	},
 	created() {
 		this.$on("crud.open", this.open);
 		this.$on("crud.close", this.close);
+
+		Form.inject.call(this, {
+			form: this.form
+		});
 	},
 	methods: {
 		// Open drawer
@@ -232,20 +231,27 @@ export default {
 
 					<div class="cl-adv-search__footer">
 						{this.opList.map((e) => {
-							return (
-								<el-button
-									{...{
-										props: {
-											size: this.props.size || "small",
-											type: e === "search" ? "primary" : ""
-										},
-										on: {
-											click: this[e]
-										}
-									}}>
-									{ButtonText[e]}
-								</el-button>
-							);
+							if (ButtonText[e]) {
+								return (
+									<el-button
+										{...{
+											props: {
+												size: this.props.size || "small",
+												type: e === "search" ? "primary" : ""
+											},
+											on: {
+												click: this[e]
+											}
+										}}>
+										{ButtonText[e]}
+									</el-button>
+								);
+							} else {
+								return renderNode(e, {
+									scope: this.form,
+									$scopedSlots: this.$scopedSlots
+								});
+							}
 						})}
 					</div>
 				</el-drawer>

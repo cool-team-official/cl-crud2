@@ -44,6 +44,10 @@ export default {
 					cancelButtonText: "取消",
 					layout: ["cancel", "confirm"]
 				},
+				hdr: {
+					hidden: false,
+					opList: ["fullscreen", "close"]
+				},
 				items: [],
 				_data: {}
 			}
@@ -75,10 +79,15 @@ export default {
 			// Merge conf
 			for (let i in this.conf) {
 				if (i == "items") {
-					this.conf.items = cloneDeep(options[i] || []);
+					this.conf.items = cloneDeep(options.items || []);
 				} else {
 					deepMerge(this.conf[i], options[i]);
 				}
+			}
+
+			// Preset form
+			if (options.form) {
+				Object.assign(this.form, options.form);
 			}
 
 			// Show dialog
@@ -340,22 +349,21 @@ export default {
 	},
 
 	render() {
+		let { props, hdr } = this.conf;
+
 		return (
 			<div class="cl-form">
 				<cl-dialog
+					visible={this.visible}
+					title={props.title}
+					props={props}
+					opList={hdr.opList}
 					{...{
-						props: {
-							title: this.conf.props.title,
-							visible: this.visible,
-							props: {
-								...this.conf.props
-							}
-						},
 						on: {
 							"update:visible": () => {
 								this.beforeClose();
 							},
-							"update:props:fullscreen": (f) => (this.conf.props.fullscreen = f)
+							"update:props:fullscreen": (f) => (props.fullscreen = f)
 						}
 					}}>
 					<div class="cl-form__container">{this.formRender()}</div>

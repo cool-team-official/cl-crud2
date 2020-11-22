@@ -17,7 +17,7 @@ yarn add cl-crud2
 #### Browser
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/cl-crud2@0.2.1/dist/cl-crud2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cl-crud2@1.0.0/dist/cl-crud2.min.js"></script>
 ```
 
 ## Demo
@@ -33,6 +33,7 @@ yarn add cl-crud2
 
 ## Version
 
+-   1.0.0 处理 cl-form, cl-adv-search 对表单操作错误的问题
 -   0.2.9 优化
 -   0.2.8 优化
 -   0.2.7 解决 cl-form props 异常

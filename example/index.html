@@ -136,6 +136,15 @@
 						</cl-crud>
 					</template>
 				</cl-form>
+
+				<!-- 自定义对话框 -->
+				<cl-dialog
+					title="自定义对话框"
+					:visible.sync="dialog.visible"
+					v-bind="dialog.props"
+				>
+					11111111111
+				</cl-dialog>
 			</cl-crud>
 		</div>
 
@@ -221,7 +230,8 @@
 						resolve({
 							id: 1,
 							name: "icssoa",
-							price: 100
+							price: 100,
+							ids: "0,3,2"
 						});
 					});
 				},
@@ -339,7 +349,7 @@
 								}
 							},
 							props: {
-								onOpen(isEdit, data, { done, submit, close }) {
+								onOpen: (isEdit, data, { done, submit, close }) => {
 									console.log("cl-upsert 打开钩子", isEdit, data);
 								},
 
@@ -392,29 +402,35 @@
 									}
 								],
 
-								opList: [
-									"close",
-									"save",
-									({ h }) => {
-										return h(
-											"el-button",
-											{
-												props: {
-													size: "small"
-												},
-												style: {
-													"margin-left": "10px"
-												},
-												on: {
-													click: () => {
-														this.$refs["upsert"].close();
+								op: {
+									layout: [
+										"close",
+										"save",
+										({ h }) => {
+											return h(
+												"el-button",
+												{
+													props: {
+														size: "small"
+													},
+													on: {
+														click: () => {
+															this.$refs["upsert"].setForm(
+																"name",
+																"神仙都没用"
+															);
+														}
 													}
-												}
-											},
-											"手动关闭"
-										);
-									}
-								]
+												},
+												"设置名称"
+											);
+										}
+									]
+								},
+
+								hdr: {
+									opList: ["fullscreen", "close"]
+								}
 							}
 						},
 						advSearch: {
@@ -473,6 +489,12 @@
 									}
 								]
 							}
+						},
+						dialog: {
+							visible: false,
+							props: {
+								title: "自定义对话框"
+							}
 						}
 					};
 				},
@@ -484,6 +506,9 @@
 								title: "自定义表单",
 								"label-width": "150px",
 								width: "1000px"
+							},
+							form: {
+								qs: [1]
 							},
 							items: [
 								{
