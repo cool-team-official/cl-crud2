@@ -29,7 +29,8 @@ export default {
 		opList: {
 			type: Array,
 			default: () => ["fullscreen", "close"]
-		}
+		},
+		hiddenOp: Boolean
 	},
 
 	watch: {
@@ -211,7 +212,7 @@ export default {
 		},
 
 		headerRender() {
-			return (
+			return this.hiddenOp ? null : (
 				<div
 					class="cl-dialog__header"
 					{...{
@@ -269,7 +270,7 @@ export default {
 		return (
 			this.visible && (
 				<el-dialog
-					custom-class="cl-dialog"
+					custom-class={`cl-dialog ${this.hiddenOp ? "hidden-header" : ""}`}
 					{...{
 						props: {
 							...this.props,

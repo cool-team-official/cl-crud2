@@ -32,6 +32,10 @@ export default {
 			type: Array,
 			default: () => ["close", "save"]
 		},
+		// Op object
+		op: Object,
+		// Dialog header object
+		hdr: Object,
 		// Save button text
 		saveButtonText: {
 			type: String,
@@ -180,11 +184,14 @@ export default {
 					...this.props
 				},
 				op: {
-					...this.op,
 					hidden: this.hiddenOp,
 					layout: this.opList,
 					confirmButtonText: this.saveButtonText,
-					cancelButtonText: this.closeButtonText
+					cancelButtonText: this.closeButtonText,
+					...this.op
+				},
+				hdr: {
+					...this.hdr
 				},
 				on: {
 					open: (data, { done, close }) => {
@@ -292,6 +299,7 @@ export default {
 			const fns = [
 				"getForm",
 				"setForm",
+				"clearForm",
 				"setData",
 				"setOptions",
 				"toggleItem",
