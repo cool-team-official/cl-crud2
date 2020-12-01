@@ -25,32 +25,38 @@ export default {
 	watch: {
 		value: {
 			immediate: true,
-			handler(val) {
-				let arr = [];
+			handler: 'setList'
+		},
 
-				if (val instanceof Array) {
-					arr = val;
-				} else {
-					arr = [val];
-				}
-
-				if (!this.multiple) {
-					arr.splice(1);
-				}
-
-				this.list2 = (this.list || []).map((e) => {
-					this.$set(
-						e,
-						"active",
-						arr.some((v) => v === e.value)
-					);
-					return e;
-				});
-			}
+		list() {
+			this.setList(this.value)
 		}
 	},
 
 	methods: {
+		setList(val) {
+			let arr = [];
+
+			if (val instanceof Array) {
+				arr = val;
+			} else {
+				arr = [val];
+			}
+
+			if (!this.multiple) {
+				arr.splice(1);
+			}
+
+			this.list2 = (this.list || []).map((e) => {
+				this.$set(
+					e,
+					"active",
+					arr.some((v) => v === e.value)
+				);
+				return e;
+			});
+		},
+
 		selectRow(item) {
 			if (item.active) {
 				item.active = false;

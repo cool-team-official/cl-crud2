@@ -33,6 +33,8 @@ yarn add cl-crud2
 
 ## Version
 
+-   0.2.10 解决 cl-query props.list 不更新问题
+-   0.2.9 优化
 -   0.2.9 优化
 -   0.2.8 优化
 -   0.2.7 解决 cl-form props 异常
