@@ -118,6 +118,7 @@ export default {
 			const done = (data) => {
 				// Assign data
 				Object.assign(this.form, data);
+				hiddenLoading()
 			};
 
 			// Close
