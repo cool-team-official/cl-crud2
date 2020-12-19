@@ -83,8 +83,7 @@
 					<cl-table ref="table" v-bind="table.props" v-on="table.on"> </cl-table>
 				</el-row>
 
-				<el-row type="flex">
-					<cl-flex1>打开控制台瞧瞧呗~</cl-flex1>
+				<el-row>
 					<cl-pagination></cl-pagination>
 				</el-row>
 
@@ -143,7 +142,7 @@
 					:visible.sync="dialog.visible"
 					v-bind="dialog.props"
 				>
-					11111111111
+					自定义对话框
 				</cl-dialog>
 			</cl-crud>
 		</div>
@@ -277,24 +276,28 @@
 							props: {
 								columns: [
 									{
-										type: "selection"
+										type: "selection",
+										align: "center",
+										width: 60
 									},
 									{
 										label: "姓名",
-										prop: "name"
+										prop: "name",
+										align: "center",
+										"min-width": 120
 									},
 									{
 										label: "存款",
 										prop: "price",
-										sortable: true
-									},
-									{
-										label: "创建时间",
-										prop: "createTime"
+										sortable: true,
+										align: "center",
+										"min-width": 120
 									},
 									{
 										label: "状态",
 										prop: "status",
+										align: "center",
+										"min-width": 120,
 										dict: [
 											{
 												label: "启用",
@@ -309,8 +312,15 @@
 										]
 									},
 									{
+										label: "创建时间",
+										prop: "createTime",
+										align: "center",
+										"min-width": 150
+									},
+									{
 										label: "操作",
 										type: "op",
+										align: "center",
 										layout: [
 											"edit",
 											"delete",
@@ -349,6 +359,11 @@
 								}
 							},
 							props: {
+								props: {
+									width: "1000px",
+									"label-position": "top"
+								},
+
 								onOpen: (isEdit, data, { done, submit, close }) => {
 									console.log("cl-upsert 打开钩子", isEdit, data);
 								},
@@ -501,7 +516,9 @@
 
 				methods: {
 					openForm() {
-						this.$refs["form"].open({
+						const { open, setForm } = this.$refs["form"];
+
+						open({
 							props: {
 								title: "自定义表单",
 								"label-width": "150px",
@@ -511,6 +528,51 @@
 								qs: [1]
 							},
 							items: [
+								{
+									label: "表单名称",
+									prop: "name",
+									component: {
+										name: "el-input"
+									}
+								},
+								{
+									props: {
+										"label-width": "0px"
+									},
+									component: ({ h }) => {
+										return h(
+											"el-divider",
+											{
+												props: {
+													"content-position": "left"
+												}
+											},
+											"测试验证el-select 清空表单"
+										);
+									}
+								},
+								{
+									label: "类型",
+									prop: "type",
+									component: {
+										name: "el-select",
+										on: {
+											change: (v) => {
+												setForm("name", v);
+											}
+										},
+										options: [
+											{
+												label: "羊姜",
+												value: "羊姜"
+											},
+											{
+												label: "神仙都没用",
+												value: "神仙都没用"
+											}
+										]
+									}
+								},
 								{
 									props: {
 										"label-width": "0px"
@@ -755,13 +817,16 @@
 
 						app.refresh();
 					},
+
 					refresh(params) {
 						this.$refs["crud"].refresh(params);
 					},
+
 					onUpsertCrudLoad({ ctx, app }) {
 						ctx.service(testService).done();
 						app.refresh();
 					},
+
 					addVad(list) {
 						list.push({
 							val: ""

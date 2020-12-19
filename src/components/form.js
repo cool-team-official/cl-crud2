@@ -4,12 +4,13 @@ import Form from "@/utils/form";
 import Parse from "@/utils/parse";
 import { __inst } from "@/options";
 import Emitter from "@/mixins/emitter";
+import Screen from '@/mixins/screen'
 import cloneDeep from "clone-deep";
 
 export default {
 	name: "cl-form",
 	componentName: "ClForm",
-	mixins: [Emitter],
+	mixins: [Emitter, Screen],
 	props: {
 		// Bind value
 		value: {
@@ -85,15 +86,17 @@ export default {
 				}
 			}
 
-			// Preset form
-			if (options.form) {
-				Object.assign(this.form, options.form);
-			}
-
 			// Show dialog
 			this.visible = true;
 
-			// Set Form
+			// Preset form
+			if (options.form) {
+				for (let i in options.form) {
+					this.$set(this.form, i, options.form[i])
+				}
+			}
+
+			// Set form data by items
 			this.conf.items.map((e) => {
 				if (e.prop) {
 					// Priority use form data
@@ -205,6 +208,7 @@ export default {
 						props: {
 							size: "small",
 							"label-width": "100px",
+							'label-position': this.isFullscreen ? 'top' : '',
 							disabled: this.saving,
 							model: this.form,
 							...props
@@ -356,9 +360,11 @@ export default {
 				<cl-dialog
 					visible={this.visible}
 					title={props.title}
-					props={props}
 					opList={hdr.opList}
 					{...{
+						props: {
+							props
+						},
 						on: {
 							"update:visible": () => {
 								this.beforeClose();

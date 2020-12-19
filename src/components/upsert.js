@@ -119,6 +119,8 @@ export default {
 				// Assign data
 				Object.assign(this.form, data);
 				hiddenLoading()
+				// Callback
+				this.$emit("open", this.isEdit, this.form);
 			};
 
 			// Close

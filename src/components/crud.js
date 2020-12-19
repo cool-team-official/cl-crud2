@@ -124,9 +124,9 @@ export default function ({ __crud, __components }) {
 			}
 
 			// Window onresize
-			window.removeEventListener("resize", function () {});
+			window.removeEventListener("resize", function () { });
 			window.addEventListener("resize", () => {
-				this.broadcast("ClTable", "resize");
+				this.broadcast("cl-table", "crud.resize");
 			});
 		},
 

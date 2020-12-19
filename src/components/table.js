@@ -45,6 +45,7 @@ export default {
 		// Crud refresh
 		this.$on("crud.refresh", ({ list }) => {
 			this.data = list;
+
 		});
 	},
 	mounted() {
@@ -180,7 +181,7 @@ export default {
 						const perm = getPermission(vnode);
 
 						if (perm) {
-							let clickEvent = () => {};
+							let clickEvent = () => { };
 							let buttonText = null;
 
 							switch (vnode) {
@@ -245,11 +246,11 @@ export default {
 											{slot ? (
 												slot({ scope })
 											) : (
-												<span class="el-dropdown-link">
-													<span>更多操作</span>
-													<i class="el-icon-arrow-down el-icon--right"></i>
-												</span>
-											)}
+													<span class="el-dropdown-link">
+														<span>更多操作</span>
+														<i class="el-icon-arrow-down el-icon--right"></i>
+													</span>
+												)}
 
 											<el-dropdown-menu
 												style={{ width }}

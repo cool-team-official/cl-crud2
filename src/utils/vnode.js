@@ -103,16 +103,28 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 		if (vnode.name) {
 			// Handle general component
 			if (["el-select", "el-radio-group", "el-checkbox-group"].includes(vnode.name)) {
+				// Append component children
 				const children = (vnode.options || []).map((e, i) => {
 					switch (vnode.name) {
 						case "el-select":
+							let label, value;
+
+							if (isString(e)) {
+								label = value = e
+							} else if (isObject(e)) {
+								label = e.label
+								value = e.value
+							} else {
+								console.error(vnode.name, 'options 参数错误')
+							}
+
 							return (
 								<el-option
 									{...{
 										props: {
 											key: i,
-											label: e.label,
-											value: e.value,
+											label,
+											value,
 											...e.props
 										}
 									}}

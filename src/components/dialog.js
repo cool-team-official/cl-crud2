@@ -1,5 +1,6 @@
 import { renderNode } from "@/utils/vnode";
 import { isBoolean, throttle } from "@/utils";
+import Screen from '@/mixins/screen'
 
 export default {
 	name: "cl-dialog",
@@ -32,7 +33,7 @@ export default {
 		},
 		hiddenOp: Boolean
 	},
-
+	mixins: [Screen],
 	watch: {
 		"props.fullscreen"(f) {
 			if (this.$el && this.$el.querySelector) {
@@ -63,6 +64,10 @@ export default {
 			handler(f) {
 				if (f) {
 					this.dragEvent();
+				} else {
+					setTimeout(() => {
+						this.changeFullscreen(false);
+					}, 300);
 				}
 			}
 		}
@@ -78,12 +83,9 @@ export default {
 		close: throttle(function () {
 			this.$emit("update:visible", false);
 			this.$emit("close");
-
-			setTimeout(() => {
-				this.changeFullscreen(false);
-			}, 300);
 		}, 10),
 
+		// Change dialog fullscreen status
 		changeFullscreen(f) {
 			this.$set(this.props, "fullscreen", isBoolean(f) ? f : !this.props.fullscreen);
 			this.$emit("update:props:fullscreen", this.props.fullscreen);
@@ -227,23 +229,38 @@ export default {
 					{/* op button */}
 					<div class="cl-dialog__headerbtn">
 						{this.opList.map((vnode) => {
+							// Fullscreen
 							if (vnode === "fullscreen") {
-								return this.props.fullscreen ? (
-									<button class="minimize" on-click={this.changeFullscreen}>
-										<i class="el-icon-minus" />
-									</button>
-								) : (
-									<button class="maximize" on-click={this.changeFullscreen}>
-										<i class="el-icon-full-screen" />
-									</button>
-								);
-							} else if (vnode === "close") {
+								// Hidden fullscreen btn
+								if (this.screen === 'xs') {
+									return null
+								}
+
+								// Show diff icon
+								if (this.props.fullscreen) {
+									return (
+										<button class="minimize" on-click={this.changeFullscreen}>
+											<i class="el-icon-minus" />
+										</button>
+									)
+								} else {
+									return (
+										<button class="maximize" on-click={this.changeFullscreen}>
+											<i class="el-icon-full-screen" />
+										</button>
+									)
+								}
+							}
+							// Close
+							else if (vnode === "close") {
 								return (
 									<button class="close" on-click={this.close}>
 										<i class="el-icon-close" />
 									</button>
 								);
-							} else {
+							}
+							// Custom node render
+							else {
 								return renderNode(vnode, {
 									$scopedSlots: this.$scopedSlots
 								});
@@ -274,6 +291,7 @@ export default {
 					{...{
 						props: {
 							...this.props,
+							fullscreen: this.isFullscreen ? true : this.props.fullscreen,
 							visible: this.visible,
 							"show-close": false
 						},

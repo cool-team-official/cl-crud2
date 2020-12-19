@@ -79,6 +79,8 @@ export default {
 				this.crud.refresh({
 					[this.field]: value
 				});
+
+				this.$emit('change', value)
 			}
 		}
 	},

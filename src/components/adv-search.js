@@ -1,6 +1,7 @@
 import { renderNode } from "@/utils/vnode";
 import { cloneDeep } from "@/utils";
 import Emitter from "@/mixins/emitter";
+import Screen from '@/mixins/screen'
 import Form from "@/utils/form";
 import Parse from "@/utils/parse";
 
@@ -41,6 +42,7 @@ export default {
 		// Hooks by search { data, { next, close } }
 		onSearch: Function
 	},
+	mixins: [Screen],
 	data() {
 		return {
 			form: {},
@@ -153,6 +155,7 @@ export default {
 						props: {
 							size: "small",
 							"label-width": "100px",
+							'label-position': this.isFullscreen ? 'top' : '',
 							disabled: this.saving,
 							model: this.form,
 							...this.props
@@ -217,7 +220,7 @@ export default {
 							visible: this.visible,
 							title: "高级搜索",
 							direction: "rtl",
-							size: "500px",
+							size: this.isFullscreen ? '100%' : "500px",
 							...this.props
 						},
 						on: {

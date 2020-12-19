@@ -58,7 +58,7 @@ export default {
 					},
 					props: {
 						background: true,
-						layout: "sizes, prev, pager, next, jumper, ->, total, slot",
+						layout: "total, sizes, prev, pager, next, jumper",
 						"page-sizes": [10, 20, 30, 40, 50, 100],
 						...this.props,
 						total: this.total,
