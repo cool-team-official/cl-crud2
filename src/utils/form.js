@@ -20,6 +20,9 @@ export default {
 			return dataset(this, p, data);
 		};
 
+		// Component scoped
+		let _this = this;
+
 		Object.assign(this, {
 			// Get form
 			getForm(prop) {
@@ -28,7 +31,8 @@ export default {
 
 			// Set form
 			setForm(prop, value) {
-				form[prop] = value;
+				// Add watch
+				_this.$set(form, prop, value);
 			},
 
 			// Set [props, on]

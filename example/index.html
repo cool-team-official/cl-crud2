@@ -110,6 +110,12 @@
 						<el-button @click="addVad(scope.vads)">添加行</el-button>
 					</template>
 
+					<!-- 测试设置表单值 -->
+					<template #slot-var="{ scope }">
+						<el-input v-model="scope._name"></el-input>
+						<el-button @click="setFormValue(scope)">设置</el-button>
+					</template>
+
 					<!-- 内嵌crud -->
 					<template #slot-crud="{scope}">
 						<cl-crud @load="onUpsertCrudLoad">
@@ -350,8 +356,8 @@
 						},
 						upsert: {
 							on: {
-								open() {
-									console.log("cl-upsert 打开");
+								open(isEdit, data) {
+									console.log("cl-upsert 打开", isEdit, data.name);
 								},
 
 								close(action) {
@@ -399,6 +405,7 @@
 										label: "是否显示存款",
 										prop: "isPrice",
 										value: false,
+										flex: false,
 										component: {
 											name: "el-switch"
 										}
@@ -525,7 +532,8 @@
 								width: "1000px"
 							},
 							form: {
-								qs: [1]
+								qs: [1],
+								_name: "羊姜"
 							},
 							items: [
 								{
@@ -533,6 +541,27 @@
 									prop: "name",
 									component: {
 										name: "el-input"
+									}
+								},
+								{
+									props: {
+										"label-width": "0px"
+									},
+									component: ({ h }) => {
+										return h(
+											"el-divider",
+											{
+												props: {
+													"content-position": "left"
+												}
+											},
+											"测试设置表单值"
+										);
+									}
+								},
+								{
+									component: {
+										name: "slot-var"
 									}
 								},
 								{
@@ -783,7 +812,7 @@
 								}
 							],
 							on: {
-								open(data, { close, submit, done }) {
+								open: (data, { close, submit, done }) => {
 									console.log("cl-form 打开钩子", data);
 								},
 
@@ -802,6 +831,10 @@
 								}
 							}
 						});
+					},
+
+					setFormValue(scope) {
+						this.$refs["form"].setForm("_name", "神仙");
 					},
 
 					onLoad({ ctx, app }) {

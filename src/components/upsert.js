@@ -80,14 +80,16 @@ export default {
 		this.inject();
 	},
 	methods: {
-		add() {
+		// Add
+		async add() {
 			this.isEdit = false;
 			this.form = {};
-			this.open();
+			await this.open();
 			this.$emit("open", false, {});
 		},
 
-		append(data) {
+		// Append data
+		async append(data) {
 			this.isEdit = false;
 
 			// Assign data
@@ -97,10 +99,11 @@ export default {
 				}
 			}
 
-			this.open();
-			this.$emit("open", false, data);
+			await this.open();
+			this.$emit("open", false, this.form);
 		},
 
+		// Edit
 		edit(data) {
 			const { showLoading, hiddenLoading } = this.$refs["form"];
 
@@ -118,14 +121,12 @@ export default {
 			const done = (data) => {
 				// Assign data
 				Object.assign(this.form, data);
-				hiddenLoading()
-				// Callback
-				this.$emit("open", this.isEdit, this.form);
+				hiddenLoading();
 			};
 
 			// Close
 			const close = () => {
-				done();
+				hiddenLoading();
 				this.close();
 			};
 
@@ -149,7 +150,7 @@ export default {
 						id: data.id
 					})
 						.then((res) => {
-							// Fill datga
+							// Finish
 							done(res);
 							resolve(res);
 
@@ -173,50 +174,63 @@ export default {
 
 			// Hook by onInfo
 			if (this.onInfo) {
-				this.onInfo(data, { next, done, close });
+				this.onInfo(data, {
+					next,
+					done: (data) => {
+						done(data);
+						this.$emit("open", true, this.form);
+					},
+					close
+				});
 			} else {
 				next(data);
 			}
 		},
 
+		// Open
 		open() {
-			this.$refs["form"].open({
-				items: this.items,
-				props: {
-					title: this.isEdit ? "编辑" : "新增",
-					...this.props
-				},
-				op: {
-					hidden: this.hiddenOp,
-					layout: this.opList,
-					confirmButtonText: this.saveButtonText,
-					cancelButtonText: this.closeButtonText,
-					...this.op
-				},
-				hdr: {
-					...this.hdr
-				},
-				on: {
-					open: (data, { done, close }) => {
-						if (this.onOpen) {
-							this.onOpen(this.isEdit, this.form, {
-								submit: () => {
-									this.submit(this.form);
-								},
-								done,
-								close
-							});
-						}
+			return new Promise((resolve) => {
+				this.$refs["form"].open({
+					items: this.items,
+					props: {
+						title: this.isEdit ? "编辑" : "新增",
+						...this.props
 					},
-					submit: this.submit,
-					close: this.close
-				},
-				_data: {
-					isEdit: this.isEdit
-				}
+					op: {
+						hidden: this.hiddenOp,
+						layout: this.opList,
+						confirmButtonText: this.saveButtonText,
+						cancelButtonText: this.closeButtonText,
+						...this.op
+					},
+					hdr: {
+						...this.hdr
+					},
+					on: {
+						open: (data, { done, close }) => {
+							if (this.onOpen) {
+								this.onOpen(this.isEdit, this.form, {
+									submit: () => {
+										this.submit(this.form);
+									},
+									done,
+									close
+								});
+							}
+
+							resolve();
+						},
+						submit: this.submit,
+						close: this.close
+					},
+					_data: {
+						isEdit: this.isEdit
+					}
+				});
 			});
 		},
 
+		// Close
 		close(action = "close") {
 			const done = () => {
 				this.$refs["form"].close();
@@ -232,10 +246,6 @@ export default {
 					done();
 				}
 			}
-		},
-
-		done() {
-			this.$refs["form"].done();
 		},
 
 		/**

@@ -4,7 +4,7 @@ import Form from "@/utils/form";
 import Parse from "@/utils/parse";
 import { __inst } from "@/options";
 import Emitter from "@/mixins/emitter";
-import Screen from '@/mixins/screen'
+import Screen from "@/mixins/screen";
 import cloneDeep from "clone-deep";
 
 export default {
@@ -92,7 +92,7 @@ export default {
 			// Preset form
 			if (options.form) {
 				for (let i in options.form) {
-					this.$set(this.form, i, options.form[i])
+					this.$set(this.form, i, options.form[i]);
 				}
 			}
 
@@ -208,7 +208,7 @@ export default {
 						props: {
 							size: "small",
 							"label-width": "100px",
-							'label-position': this.isFullscreen ? 'top' : '',
+							"label-position": this.isFullscreen ? "top" : "",
 							disabled: this.saving,
 							model: this.form,
 							...props
@@ -216,11 +216,17 @@ export default {
 					}}>
 					<el-row gutter={10} v-loading={this.loading}>
 						{items.map((e, i) => {
+							// Is hidden
 							e._hidden = Parse("hidden", {
 								value: e.hidden,
 								scope: this.form,
 								data: this.conf._data
 							});
+
+							// Is flex
+							if (e.flex === undefined) {
+								e.flex = true;
+							}
 
 							return (
 								!e._hidden && (
@@ -261,7 +267,12 @@ export default {
 															return (
 																e[name] && (
 																	<div
-																		class={`cl-form-item__${name}`}
+																		class={[
+																			`cl-form-item__${name}`,
+																			{
+																				"is-flex": e.flex
+																			}
+																		]}
 																		v-show={!e.collapse}>
 																		{renderNode(e[name], {
 																			prop: e.prop,
