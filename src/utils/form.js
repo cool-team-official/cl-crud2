@@ -1,4 +1,4 @@
-import { dataset, isArray, isObject } from "@/utils";
+import { dataset } from "@/utils";
 
 export default {
 	inject({ form, scope = "" }) {
@@ -70,14 +70,8 @@ export default {
 
 			// Clear form data
 			clearForm() {
-				for (let i in this.form) {
-					if (isArray(this.form[i])) {
-						this.form[i] = [];
-					} else if (isObject(this.form[i])) {
-						this.form[i] = {};
-					} else {
-						this.form[i] = undefined;
-					}
+				for (let i in form) {
+					delete form[i]
 				}
 			}
 		});

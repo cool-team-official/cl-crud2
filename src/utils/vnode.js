@@ -106,6 +106,7 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 				// Append component children
 				const children = (vnode.options || []).map((e, i) => {
 					switch (vnode.name) {
+						// el-select
 						case "el-select":
 							let label, value;
 
@@ -131,16 +132,30 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 								/>
 							);
 
+						// el-radio
 						case "el-radio-group":
 							return (
-								<el-radio key={i} label={e.value} {...{ props: e.props }}>
+								<el-radio {...{
+									props: {
+										key: i,
+										label: e.value,
+										...e.props
+									}
+								}}>
 									{e.label}
 								</el-radio>
 							);
 
+						// el-checkbox
 						case "el-checkbox-group":
 							return (
-								<el-checkbox key={i} label={e.value} {...{ props: e.props }}>
+								<el-checkbox {...{
+									props: {
+										key: i,
+										label: e.value,
+										...e.props
+									}
+								}}>
 									{e.label}
 								</el-checkbox>
 							);

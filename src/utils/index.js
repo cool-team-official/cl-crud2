@@ -2,27 +2,6 @@ import cloneDeep from "clone-deep";
 import flat from "array.prototype.flat";
 import { __vue, __plugins, __inst } from "../options";
 
-export function debounce(fn, delay) {
-	let timer = null;
-
-	return function () {
-		let args = arguments;
-		let context = this;
-
-		if (timer) {
-			clearTimeout(timer);
-
-			timer = setTimeout(function () {
-				fn.apply(context, args);
-			}, delay);
-		} else {
-			timer = setTimeout(function () {
-				fn.apply(context, args);
-			}, delay);
-		}
-	};
-}
-
 export function throttle(fn, delay) {
 	let prev = Date.now();
 	return function () {
@@ -85,16 +64,6 @@ export function clone(obj) {
 	return Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescriptors(obj));
 }
 
-export function certainProperty(obj, keys) {
-	return keys.reduce((result, key) => {
-		if (obj.hasOwnProperty(key)) {
-			result[key] = obj[key];
-		}
-
-		return result;
-	}, {});
-}
-
 export function getParent(name) {
 	let parent = this.$parent;
 
@@ -155,54 +124,6 @@ export function dataset(obj, key, value) {
 	} catch (e) {
 		console.error("格式错误", `${key}`);
 		return {};
-	}
-}
-
-export function print(title, value) {
-	console.log(title);
-
-	if (value) {
-		if (typeof value == "object") {
-			let obj = {};
-
-			for (let i in value) {
-				obj[i] = value[i];
-			}
-
-			if (console.table) {
-				console.table(obj);
-			} else {
-				console.log(obj);
-			}
-		} else {
-			console.log(value);
-		}
-	} else {
-		console.log(value);
-	}
-}
-
-export function resetForm(items, form) {
-	items.forEach((e) => {
-		if (isArray(e.value)) {
-			form[e.prop] = [];
-		} else if (isObject(e.value)) {
-			form[e.prop] = {};
-		} else {
-			form[e.prop] = undefined;
-		}
-	});
-}
-
-export function clearForm(form) {
-	for (let i in form) {
-		if (isArray(form[i])) {
-			form[i] = [];
-		} else if (isObject(form[i])) {
-			form[i] = {};
-		} else {
-			form[i] = undefined;
-		}
 	}
 }
 

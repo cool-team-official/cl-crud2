@@ -8,7 +8,11 @@ export default {
 	inject: ["crud"],
 	mixins: [Emitter],
 	props: {
-		columns: Array,
+		columns: {
+			type: Array,
+			required: true,
+			default: () => []
+		},
 		on: {
 			type: Object,
 			default: () => {
@@ -286,7 +290,7 @@ export default {
 			}
 		},
 
-		appendRender(h) {
+		appendRender() {
 			return this.$slots["append"];
 		},
 
@@ -360,10 +364,6 @@ export default {
 
 		doLayout() {
 			this.$refs["table"].doLayout();
-		},
-
-		setCurrentRow() {
-			this.$refs["table"].setCurrentRow();
 		},
 
 		sort(prop, order) {

@@ -1,11 +1,11 @@
-import { deepMerge, isArray, isString, isObject, isFunction, getParent } from "@/utils";
+import { deepMerge, isArray, isString, isObject, isFunction } from "@/utils";
 import { bootstrap } from "@/app";
 import { __inst } from "@/options";
 import Emitter from "@/mixins/emitter";
 
 require("@/assets/css/index.styl");
 
-export default function ({ __crud, __components }) {
+export default function ({ __crud }) {
 	return {
 		name: "cl-crud",
 		componentName: "ClCrud",
