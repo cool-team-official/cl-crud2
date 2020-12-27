@@ -8,7 +8,7 @@ require("./common");
 export const CRUD = {
 	version: "0.3.3",
 
-	install: function (Vue, options) {
+	install: function (app, options) {
 		const { crud, components, plugins } = options || {};
 
 		// 合并参数
@@ -16,18 +16,18 @@ export const CRUD = {
 		deepMerge(__vue, Vue);
 		deepMerge(__components, components);
 		deepMerge(__plugins, plugins);
-		deepMerge(__inst, new Vue());
+		// deepMerge(__inst, new app());
 
 		// crud 组件
-		Vue.component("cl-crud", Crud({ __crud, __components }));
+		app.component("cl-crud", Crud({ __crud, __components }));
 
 		// 注册组件
 		for (let i in comps) {
-			Vue.component(comps[i].name, comps[i]);
+			app.component(comps[i].name, comps[i]);
 		}
 
 		// 挂载 $crud
-		Vue.prototype.$crud = {
+		app.config.globalProperties.$crud = {
 			emit: (name, callback) => {
 				__inst.$emit(name, callback);
 			}
