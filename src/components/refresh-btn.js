@@ -1,3 +1,5 @@
+import { h } from "vue";
+
 export default {
 	name: "cl-refresh-btn",
 	componentName: "ClRefreshBtn",
@@ -7,19 +9,18 @@ export default {
 		props: Object
 	},
 	render() {
-		return (
-			<el-button
-				{...{
-					props: {
-						size: "mini",
-						...this.props
-					},
-					on: {
-						click: this.crud.refresh
-					}
-				}}>
-				{this.$slots.default || "刷新"}
-			</el-button>
+		return h(
+			"el-button",
+			{
+				props: {
+					size: "mini",
+					...this.props
+				},
+				on: {
+					click: this.crud.refresh
+				}
+			},
+			this.$slots.default || "刷新"
 		);
 	}
 };

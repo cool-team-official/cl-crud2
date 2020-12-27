@@ -13,10 +13,12 @@ export const CRUD = {
 
 		// 合并参数
 		deepMerge(__crud, crud);
-		deepMerge(__vue, Vue);
+		deepMerge(__vue, app);
 		deepMerge(__components, components);
 		deepMerge(__plugins, plugins);
-		// deepMerge(__inst, new app());
+		// deepMerge(__inst, app);
+
+		console.log(app)
 
 		// crud 组件
 		app.component("cl-crud", Crud({ __crud, __components }));

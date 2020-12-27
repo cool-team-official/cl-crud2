@@ -65,7 +65,7 @@ const parse_jsx = (vnode, options = {}) => {
 		data.attrs.value = scope[prop];
 		// Add input event
 		data.on.input = (val) => {
-			__inst.$set(scope, prop, val);
+			scope[prop] = val;
 		};
 	}
 
@@ -111,12 +111,12 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 							let label, value;
 
 							if (isString(e)) {
-								label = value = e
+								label = value = e;
 							} else if (isObject(e)) {
-								label = e.label
-								value = e.value
+								label = e.label;
+								value = e.value;
 							} else {
-								console.error(vnode.name, 'options 参数错误')
+								console.error(vnode.name, "options 参数错误");
 							}
 
 							return (
@@ -135,13 +135,14 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 						// el-radio
 						case "el-radio-group":
 							return (
-								<el-radio {...{
-									props: {
-										key: i,
-										label: e.value,
-										...e.props
-									}
-								}}>
+								<el-radio
+									{...{
+										props: {
+											key: i,
+											label: e.value,
+											...e.props
+										}
+									}}>
 									{e.label}
 								</el-radio>
 							);
@@ -149,13 +150,14 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 						// el-checkbox
 						case "el-checkbox-group":
 							return (
-								<el-checkbox {...{
-									props: {
-										key: i,
-										label: e.value,
-										...e.props
-									}
-								}}>
+								<el-checkbox
+									{...{
+										props: {
+											key: i,
+											label: e.value,
+											...e.props
+										}
+									}}>
 									{e.label}
 								</el-checkbox>
 							);

@@ -2,6 +2,7 @@ import { deepMerge, isArray, isString, isObject, isFunction } from "@/utils";
 import { bootstrap } from "@/app";
 import { __inst } from "@/options";
 import Emitter from "@/mixins/emitter";
+import { h } from "vue";
 
 require("@/assets/css/index.styl");
 
@@ -15,6 +16,8 @@ export default function ({ __crud }) {
 			onDelete: Function,
 			onRefresh: Function
 		},
+
+		emits: ['load'],
 
 		mixins: [Emitter],
 
@@ -84,9 +87,9 @@ export default function ({ __crud }) {
 		},
 
 		created() {
-			this.$on("table.selection-change", ({ selection }) => {
-				this.selection = selection;
-			});
+			// this.$on("table.selection-change", ({ selection }) => {
+			// 	this.selection = selection;
+			// });
 		},
 
 		mounted() {
@@ -124,7 +127,7 @@ export default function ({ __crud }) {
 			}
 
 			// Window onresize
-			window.removeEventListener("resize", function () { });
+			window.removeEventListener("resize", function () {});
 			window.addEventListener("resize", () => {
 				this.broadcast("cl-table", "crud.resize");
 			});
@@ -332,7 +335,13 @@ export default function ({ __crud }) {
 		},
 
 		render() {
-			return <div class="cl-crud">{this.$slots.default}</div>;
+			return h(
+				"div",
+				{
+					class: "cl-crud"
+				},
+				this.$slots.default
+			);
 		}
 	};
 }
