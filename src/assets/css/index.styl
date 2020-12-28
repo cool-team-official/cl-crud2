@@ -354,12 +354,6 @@
 	}
 }
 
-@media only screen and (max-width: 768px) {
-	.el-message-box {
-		width: 90% !important;
-	}
-}
-
 // Element-ui Theme
 .el-message {
 	&.el-message--success, &.el-message--error, &.el-message--info, &.el-message--warning {
@@ -408,5 +402,22 @@
 
 	.el-checkbox__label {
 		font-size: 12px;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.el-message-box {
+		width: 90% !important;
+	}
+
+	.el-table {
+		&__body {
+			&-wrapper {
+				&::-webkit-scrollbar {
+					height: 6px;
+					width: 6px;
+				}
+			}
+		}
 	}
 }
