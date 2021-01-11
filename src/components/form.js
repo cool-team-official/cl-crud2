@@ -377,7 +377,7 @@ export default {
 							props
 						},
 						on: {
-							"update:visible": () => {
+							close: () => {
 								this.beforeClose();
 							},
 							"update:props:fullscreen": (f) => (props.fullscreen = f)

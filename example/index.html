@@ -62,6 +62,7 @@
 						</el-select>
 					</cl-filter>
 					<el-button size="mini" @click="openForm">自定义测试表单</el-button>
+					<el-button size="mini" @click="openDialog">自定义对话框</el-button>
 					<cl-flex1></cl-flex1>
 					<cl-search-key
 						field="name"
@@ -147,6 +148,7 @@
 					title="自定义对话框"
 					:visible.sync="dialog.visible"
 					v-bind="dialog.props"
+					v-on="dialog.on"
 				>
 					自定义对话框
 				</cl-dialog>
@@ -218,7 +220,7 @@
 			];
 
 			const testService = {
-				page: (p) => {
+				page: p => {
 					console.log("GET[page]", p);
 					return Promise.resolve({
 						list: userList,
@@ -229,9 +231,9 @@
 						}
 					});
 				},
-				info: (d) => {
+				info: d => {
 					console.log("GET[info]", d);
-					return new Promise((resolve) => {
+					return new Promise(resolve => {
 						resolve({
 							id: 1,
 							name: "icssoa",
@@ -240,15 +242,15 @@
 						});
 					});
 				},
-				add: (d) => {
+				add: d => {
 					console.log("POST[add]", d);
 					return Promise.resolve();
 				},
-				delete: (d) => {
+				delete: d => {
 					console.log("POST[delete]", d);
 					return Promise.resolve();
 				},
-				update: (d) => {
+				update: d => {
 					console.log("POST[update]", d);
 					return Promise.resolve();
 				}
@@ -274,7 +276,7 @@
 						},
 						table: {
 							on: {
-								"row-click": (row) => {
+								"row-click": row => {
 									console.log("行点击", row);
 								}
 							},
@@ -515,6 +517,20 @@
 							visible: false,
 							props: {
 								title: "自定义对话框"
+							},
+							on: {
+								open() {
+									console.log("open");
+								},
+								closed() {
+									console.log("closed");
+								},
+								opened() {
+									console.log("opened");
+								},
+								close() {
+									console.log("close");
+								}
 							}
 						}
 					};
@@ -585,7 +601,7 @@
 									component: {
 										name: "el-select",
 										on: {
-											change: (v) => {
+											change: v => {
 												setForm("name", v);
 											}
 										},
@@ -830,6 +846,10 @@
 								}
 							}
 						});
+					},
+
+					openDialog() {
+						this.dialog.visible = true;
 					},
 
 					setFormValue(scope) {

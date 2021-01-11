@@ -79,11 +79,19 @@ export default {
 			this.$emit("open");
 		},
 
+		opened() {
+			this.$emit('opened')
+		},
+
 		// Avoid double close event
 		close: throttle(function () {
 			this.$emit("update:visible", false);
 			this.$emit("close");
 		}, 10),
+
+		closed() {
+			this.$emit('closed')
+		},
 
 		// Change dialog fullscreen status
 		changeFullscreen(f) {
@@ -285,27 +293,26 @@ export default {
 		const { body, footer } = this.slotsRender();
 
 		return (
-			this.visible && (
-				<el-dialog
-					custom-class={`cl-dialog ${this.hiddenOp ? "hidden-header" : ""}`}
-					{...{
-						props: {
-							...this.props,
-							fullscreen: this.isFullscreen ? true : this.props.fullscreen,
-							visible: this.visible,
-							"show-close": false
-						},
-						on: {
-							...this.on,
-							open: this.open,
-							close: this.close
-						}
-					}}>
-					<template slot="title">{this.headerRender()}</template>
-					{body}
-					<template slot="footer">{footer}</template>
-				</el-dialog>
-			)
+			<el-dialog
+				custom-class={`cl-dialog ${this.hiddenOp ? "hidden-header" : ""}`}
+				{...{
+					props: {
+						...this.props,
+						fullscreen: this.isFullscreen ? true : this.props.fullscreen,
+						visible: this.visible,
+						"show-close": false
+					},
+					on: {
+						open: this.open,
+						close: this.close,
+						opened: this.opened,
+						closed: this.closed
+					}
+				}}>
+				<template slot="title">{this.headerRender()}</template>
+				{body}
+				<template slot="footer">{footer}</template>
+			</el-dialog>
 		);
 	}
 };
