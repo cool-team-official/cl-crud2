@@ -15,6 +15,8 @@ const parse_jsx = (vnode, options = {}) => {
 
 		if (rn) {
 			return rn({ scope });
+		} else {
+			return <cl-error-message title={`组件渲染失败，未找到插槽：${vnode.name}`} />;
 		}
 	}
 
@@ -102,66 +104,63 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 
 		if (vnode.name) {
 			// Handle general component
-			if (["el-select", "el-radio-group", "el-checkbox-group"].includes(vnode.name)) {
+			const keys = ["el-select", "el-radio-group", "el-checkbox-group"]
+
+			if (keys.includes(vnode.name)) {
 				// Append component children
 				const children = (vnode.options || []).map((e, i) => {
-					switch (vnode.name) {
-						// el-select
-						case "el-select":
-							let label, value;
+					if (vnode.name === 'el-select') {
+						let label, value;
 
-							if (isString(e)) {
-								label = value = e
-							} else if (isObject(e)) {
-								label = e.label
-								value = e.value
-							} else {
-								console.error(vnode.name, 'options 参数错误')
-							}
+						if (isString(e)) {
+							label = value = e
+						} else if (isObject(e)) {
+							label = e.label
+							value = e.value
+						} else {
+							return <cl-error-message title={`组件渲染失败，options 参数错误`} />;
+						}
 
-							return (
-								<el-option
-									{...{
-										props: {
-											key: i,
-											label,
-											value,
-											...e.props
-										}
-									}}
-								/>
-							);
-
-						// el-radio
-						case "el-radio-group":
-							return (
-								<el-radio {...{
+						return (
+							<el-option
+								{...{
 									props: {
 										key: i,
-										label: e.value,
+										label,
+										value,
 										...e.props
 									}
-								}}>
-									{e.label}
-								</el-radio>
-							);
-
-						// el-checkbox
-						case "el-checkbox-group":
-							return (
-								<el-checkbox {...{
-									props: {
-										key: i,
-										label: e.value,
-										...e.props
-									}
-								}}>
-									{e.label}
-								</el-checkbox>
-							);
-
-						default:
-							return null;
+								}}
+							/>
+						);
+					}
+					else if (vnode.name === 'el-radio-group') {
+						return (
+							<el-radio {...{
+								props: {
+									key: i,
+									label: e.value,
+									...e.props
+								}
+							}}>
+								{e.label}
+							</el-radio>
+						);
+					} else if (vnode.name === 'el-checkbox-group') {
+						return (
+							<el-checkbox {...{
+								props: {
+									key: i,
+									label: e.value,
+									...e.props
+								}
+							}}>
+								{e.label}
+							</el-checkbox>
+						);
+					}
+					else {
+						return null
 					}
 				});
 
@@ -170,7 +169,7 @@ export function renderNode(vnode, { prop, scope, $scopedSlots }) {
 				return parse_jsx(vnode, { prop, scope, $scopedSlots });
 			}
 		} else {
-			console.error("Component name is null");
+			return <cl-error-message title={`组件渲染失败，组件 name 不能为空`} />;
 		}
 	}
 }

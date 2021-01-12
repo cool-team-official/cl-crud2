@@ -55,7 +55,8 @@ export default {
 	mounted() {
 		this.emptyRender();
 		this.calcMaxHeight();
-		this.onEmit();
+		this.bindEmit();
+		this.bindMethods()
 	},
 	methods: {
 		columnRender() {
@@ -303,13 +304,7 @@ export default {
 				order = "ascending";
 			}
 
-			this.$refs["table"].sort(this.table.sort.prop, "");
 			this.$refs["table"].sort(prop, order);
-
-			this.table.sort = {
-				prop,
-				order
-			};
 		},
 
 		sortChange({ prop, order }) {
@@ -334,52 +329,12 @@ export default {
 			}
 		},
 
-		clearSelection() {
-			this.$refs["table"].clearSelection();
-		},
-
-		toggleRowSelection(row, selected) {
-			this.$refs["table"].toggleRowSelection(row, selected);
-		},
-
-		toggleAllSelection() {
-			this.$refs["table"].toggleAllSelection();
-		},
-
-		toggleRowExpansion(row, expanded) {
-			this.$refs["table"].toggleRowExpansion(row, expanded);
-		},
-
-		setCurrentRow(row) {
-			this.$refs["table"].setCurrentRow(row);
-		},
-
-		clearSort() {
-			this.$refs["table"].clearSort();
-		},
-
-		clearFilter(columnKey) {
-			this.$refs["table"].clearFilter(columnKey);
-		},
-
-		doLayout() {
-			this.$refs["table"].doLayout();
-		},
-
-		sort(prop, order) {
-			this.$refs["table"].sort(prop, order);
-		},
-
-		select(selection, row) {
-			this.$emit("select", selection, row);
-		},
-
 		selectionChange(selection) {
 			this.dispatch("cl-crud", "table.selection-change", { selection });
 			this.$emit("selection-change", selection);
 		},
 
-		onEmit() {
+		bindEmit() {
 			const funcs = [
 				"select",
 				"select-all",
@@ -402,6 +357,22 @@ export default {
 				this.emit[name] = (...args) => {
 					this.$emit.apply(this, [name, ...args]);
 				};
+			});
+		},
+
+		bindMethods() {
+			[
+				"clearSelection",
+				"toggleRowSelection",
+				"toggleAllSelection",
+				"toggleRowExpansion",
+				"setCurrentRow",
+				"clearSort",
+				"clearFilter",
+				"doLayout",
+				"sort"
+			].forEach(e => {
+				this[e] = this.$refs["table"][e];
 			});
 		},
 

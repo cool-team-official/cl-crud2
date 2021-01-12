@@ -27,7 +27,7 @@ export default {
 		sync: Boolean,
 		// Hidden operation button
 		hiddenOp: Boolean,
-		// Op button ['close', 'save'] | ["cancel", "confirm"]
+		// Op button ['close | cancel', 'save']
 		opList: {
 			type: Array,
 			default: () => ["close", "save"]

@@ -35,8 +35,8 @@ export default {
 				},
 				props: {
 					fullscreen: false,
-					"append-to-body": true,
 					"close-on-click-modal": false,
+					"append-to-body": true,
 					"destroy-on-close": true
 				},
 				op: {
@@ -119,6 +119,10 @@ export default {
 		},
 
 		beforeClose(action = "close") {
+			if (!this.visible) {
+				return false
+			}
+
 			// Close event
 			const done = () => {
 				this.close();
@@ -378,7 +382,7 @@ export default {
 						},
 						on: {
 							close: () => {
-								this.beforeClose();
+								this.beforeClose('close');
 							},
 							"update:props:fullscreen": (f) => (props.fullscreen = f)
 						}

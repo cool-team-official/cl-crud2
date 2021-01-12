@@ -93,7 +93,13 @@
 				</cl-adv-search>
 
 				<!-- 编辑、新增 -->
-				<cl-upsert ref="upsert" v-bind="upsert.props" v-on="upsert.on"> </cl-upsert>
+				<cl-upsert
+					v-model="upsert.form"
+					ref="upsert"
+					v-bind="upsert.props"
+					v-on="upsert.on"
+				>
+				</cl-upsert>
 
 				<!-- 自定义表单 -->
 				<cl-form ref="form">
@@ -427,8 +433,8 @@
 
 								op: {
 									layout: [
-										"close",
-										"save",
+										"cancel",
+										"confirm",
 										({ h }) => {
 											return h(
 												"el-button",
@@ -438,10 +444,11 @@
 													},
 													on: {
 														click: () => {
-															this.$refs["upsert"].setForm(
-																"name",
-																"神仙都没用"
-															);
+															// this.$refs["upsert"].setForm(
+															// 	"name",
+															// 	"神仙都没用"
+															// );
+															this.upsert.form.name = '神仙都没用'
 														}
 													}
 												},
@@ -454,6 +461,9 @@
 								hdr: {
 									opList: ["fullscreen", "close"]
 								}
+							},
+							form: {
+								name: "xxxx"
 							}
 						},
 						advSearch: {
@@ -840,8 +850,8 @@
 									console.log("cl-form 提交钩子", data);
 
 									setTimeout(() => {
-										done();
 										this.$message.success("提交成功");
+										close();
 									}, 1500);
 								}
 							}

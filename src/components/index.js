@@ -12,6 +12,7 @@ import Table from "./table";
 import Upsert from "./upsert";
 import Dialog from "./dialog";
 import Filter from "./filter";
+import ErrorMessage from "./error-message";
 
 export {
 	AddBtn,
@@ -27,5 +28,6 @@ export {
 	Table,
 	Upsert,
 	Dialog,
-	Filter
+	Filter,
+	ErrorMessage
 };

@@ -33,6 +33,7 @@ yarn add cl-crud2
 
 ## Version
 
+-   0.3.4 优化 cl-dialog cl-form 周期
 -   0.3.3 解决 cl-form 作用域改变问题
 -   0.3.0 解决 cl-form 默认值不监听问题，对组件添加响应式布局
 -   0.2.11 解决 cl-query props.list 不更新问题
