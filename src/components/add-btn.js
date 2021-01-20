@@ -20,7 +20,7 @@ export default {
 							click: this.crud.rowAdd
 						}
 					}}>
-					{this.$slots.default || "新增"}
+					{this.$slots.default || this.crud.dict.label.add}
 				</el-button>
 			)
 		);

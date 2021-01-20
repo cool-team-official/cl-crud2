@@ -62,6 +62,14 @@ export default function ({ __crud }) {
 					sort: {
 						order: "order",
 						prop: "prop"
+					},
+					label: {
+						add: '新增',
+						delete: '删除',
+						multiDelete: '删除',
+						update: '编辑',
+						refresh: '刷新',
+						advSearch: '高级搜索'
 					}
 				},
 				params: {

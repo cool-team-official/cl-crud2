@@ -193,11 +193,11 @@ export default {
 								case "edit":
 								case "update":
 									clickEvent = rowEdit;
-									buttonText = "编辑";
+									buttonText = this.crud.dict.label.update;
 									break;
 								case "delete":
 									clickEvent = rowDelete;
-									buttonText = "删除";
+									buttonText = this.crud.dict.label.delete;
 									break;
 							}
 

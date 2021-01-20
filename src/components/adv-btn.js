@@ -20,7 +20,7 @@ export default {
 						}
 					}}>
 					<i class="el-icon-search" />
-					{this.$slots.default || "高级搜索"}
+					{this.$slots.default || this.crud.dict.label.advSearch}
 				</el-button>
 			</div>
 		);

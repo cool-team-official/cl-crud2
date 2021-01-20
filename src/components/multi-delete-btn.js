@@ -21,7 +21,7 @@ export default {
 							click: this.crud.deleteMulti
 						}
 					}}>
-					{this.$slots.default || "删除"}
+					{this.$slots.default || this.crud.dict.label.multiDelete || this.crud.dict.label.delete}
 				</el-button>
 			)
 		);
