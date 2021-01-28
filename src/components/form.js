@@ -2,7 +2,7 @@ import { deepMerge, isFunction } from "@/utils";
 import { renderNode } from "@/utils/vnode";
 import Form from "@/utils/form";
 import Parse from "@/utils/parse";
-import { __inst } from "@/options";
+import { __inst } from "@/global";
 import Emitter from "@/mixins/emitter";
 import Screen from "@/mixins/screen";
 import cloneDeep from "clone-deep";

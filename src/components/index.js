@@ -1,3 +1,4 @@
+import Crud from './crud'
 import AddBtn from "./add-btn";
 import AdvBtn from "./adv-btn";
 import AdvSearch from "./adv-search";
@@ -15,6 +16,7 @@ import Filter from "./filter";
 import ErrorMessage from "./error-message";
 
 export {
+	Crud,
 	AddBtn,
 	AdvBtn,
 	AdvSearch,

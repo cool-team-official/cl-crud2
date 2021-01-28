@@ -1,5 +1,5 @@
 import Emitter from "@/mixins/emitter";
-import { __inst } from "@/options";
+import { __inst } from "@/global";
 
 export default {
 	name: "cl-upsert",

@@ -1,6 +1,6 @@
 import cloneDeep from "clone-deep";
 import flat from "array.prototype.flat";
-import { __vue, __plugins, __inst } from "../options";
+import { __vue, __plugins, __inst } from "@/global";
 
 export function throttle(fn, delay) {
 	let prev = Date.now();

@@ -1,25 +1,20 @@
-import { __crud, __vue, __components, __plugins, __inst } from "./options";
-import { deepMerge } from "./utils";
-import Crud from "./components/crud";
+import * as global from "./global";
 import * as comps from "./components";
 
 require("./common");
 
 export const CRUD = {
-	version: "0.3.5",
+	version: "0.3.6",
 
 	install: function (Vue, options) {
 		const { crud, components, plugins } = options || {};
 
-		// 合并参数
-		deepMerge(__crud, crud);
-		deepMerge(__vue, Vue);
-		deepMerge(__components, components);
-		deepMerge(__plugins, plugins);
-		deepMerge(__inst, new Vue());
-
-		// crud 组件
-		Vue.component("cl-crud", Crud({ __crud, __components }));
+		// 设置全局参数
+		global.__crud = crud
+		global.__vue = Vue
+		global.__components = components
+		global.__plugins = plugins
+		global.__inst = new Vue()
 
 		// 注册组件
 		for (let i in comps) {
@@ -29,7 +24,7 @@ export const CRUD = {
 		// 挂载 $crud
 		Vue.prototype.$crud = {
 			emit: (name, callback) => {
-				__inst.$emit(name, callback);
+				global.__inst.$emit(name, callback);
 			}
 		};
 	}
