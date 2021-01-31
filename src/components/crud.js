@@ -63,12 +63,14 @@ export default {
 					prop: "prop"
 				},
 				label: {
-					add: '新增',
-					delete: '删除',
-					multiDelete: '删除',
-					update: '编辑',
-					refresh: '刷新',
-					advSearch: '高级搜索'
+					add: "新增",
+					delete: "删除",
+					multiDelete: "删除",
+					update: "编辑",
+					refresh: "刷新",
+					advSearch: "高级搜索",
+					saveButtonText: "保存",
+					closeButtonText: "关闭"
 				}
 			},
 			params: {
@@ -77,14 +79,6 @@ export default {
 			},
 			fn: {
 				permission: null
-			},
-			upsert: {
-				items: [],
-				props: {},
-				opList: ["close", "save"],
-				sync: false,
-				saveButtonText: "保存",
-				closeButtonText: "关闭"
 			},
 			events: {}
 		};
@@ -131,9 +125,9 @@ export default {
 		}
 
 		// Window onresize
-		window.removeEventListener("resize", function () { });
+		window.removeEventListener("resize", function () {});
 		window.addEventListener("resize", () => {
-			this.doLayout()
+			this.doLayout();
 		});
 	},
 
@@ -341,4 +335,4 @@ export default {
 	render() {
 		return <div class="cl-crud">{this.$slots.default}</div>;
 	}
-}
+};

@@ -27,7 +27,7 @@ export default {
 		sync: Boolean,
 		// Hidden operation button
 		hiddenOp: Boolean,
-		// Op button ['close | cancel', 'save']
+		// Op buttons
 		opList: {
 			type: Array,
 			default: () => ["close", "save"]
@@ -37,15 +37,9 @@ export default {
 		// Dialog header object
 		hdr: Object,
 		// Save button text
-		saveButtonText: {
-			type: String,
-			default: "保存"
-		},
+		saveButtonText: String,
 		// Close button text
-		closeButtonText: {
-			type: String,
-			default: "关闭"
-		},
+		closeButtonText: String,
 		// Hook by open { isEdit, data, { submit, done, close } }
 		onOpen: Function,
 		// Hook by close { action, done }
@@ -189,6 +183,8 @@ export default {
 
 		// Open
 		open() {
+			const { saveButtonText, closeButtonText } = this.crud.dict.label;
+
 			return new Promise((resolve) => {
 				this.$refs["form"].open({
 					items: this.items,
@@ -199,8 +195,8 @@ export default {
 					op: {
 						hidden: this.hiddenOp,
 						layout: this.opList,
-						confirmButtonText: this.saveButtonText,
-						cancelButtonText: this.closeButtonText,
+						saveButtonText: this.saveButtonText || saveButtonText,
+						closeButtonText: this.closeButtonText || closeButtonText,
 						...this.op
 					},
 					hdr: {
@@ -318,8 +314,8 @@ export default {
 				"toggleItem",
 				"hiddenItem",
 				"showItem",
-				'showLoading',
-				'hiddenLoading'
+				"showLoading",
+				"hiddenLoading"
 			];
 
 			fns.forEach((e) => {

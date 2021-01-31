@@ -41,9 +41,9 @@ export default {
 				},
 				op: {
 					hidden: false,
-					confirmButtonText: "保存",
-					cancelButtonText: "取消",
-					layout: ["cancel", "confirm"]
+					saveButtonText: "保存",
+					closeButtonText: "取消",
+					layout: ["close", "save"]
 				},
 				hdr: {
 					hidden: false,
@@ -120,7 +120,7 @@ export default {
 
 		beforeClose(action = "close") {
 			if (!this.visible) {
-				return false
+				return false;
 			}
 
 			// Close event
@@ -148,6 +148,7 @@ export default {
 
 		clear() {
 			this.clearForm();
+			this.$refs["form"].clearValidate();
 		},
 
 		submit() {
@@ -315,14 +316,14 @@ export default {
 		},
 
 		footerRender() {
-			const { hidden, layout, confirmButtonText, cancelButtonText } = this.conf.op;
+			const { hidden, layout, saveButtonText, closeButtonText } = this.conf.op;
 			const { size = "small" } = this.conf.props;
 
 			return (
 				<div class="cl-form__footer">
 					{!hidden &&
 						layout.map((vnode) => {
-							if (vnode == "confirm" || vnode == "save") {
+							if (vnode == "save") {
 								return (
 									<el-button
 										{...{
@@ -336,10 +337,10 @@ export default {
 												click: this.submit
 											}
 										}}>
-										{confirmButtonText}
+										{saveButtonText}
 									</el-button>
 								);
-							} else if (vnode == "cancel" || vnode == "close") {
+							} else if (vnode == "close") {
 								return (
 									<el-button
 										{...{
@@ -352,7 +353,7 @@ export default {
 												}
 											}
 										}}>
-										{cancelButtonText}
+										{closeButtonText}
 									</el-button>
 								);
 							} else {
@@ -382,7 +383,7 @@ export default {
 						},
 						on: {
 							close: () => {
-								this.beforeClose('close');
+								this.beforeClose("close");
 							},
 							"update:props:fullscreen": (f) => (props.fullscreen = f)
 						}

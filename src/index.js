@@ -4,17 +4,17 @@ import * as comps from "./components";
 require("./common");
 
 export const CRUD = {
-	version: "0.3.7",
+	version: "0.3.8",
 
 	install: function (Vue, options) {
 		const { crud, components, plugins } = options || {};
 
 		// 设置全局参数
-		global.__crud = crud
-		global.__vue = Vue
-		global.__components = components
-		global.__plugins = plugins
-		global.__inst = new Vue()
+		global.__crud = crud;
+		global.__vue = Vue;
+		global.__components = components;
+		global.__plugins = plugins;
+		global.__inst = new Vue();
 
 		// 注册组件
 		for (let i in comps) {
