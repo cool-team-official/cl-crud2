@@ -1,16 +1,13 @@
-import { deepMerge, isFunction } from "@/utils";
+import { deepMerge, isFunction, cloneDeep } from "@/utils";
 import { renderNode } from "@/utils/vnode";
-import Form from "@/utils/form";
 import Parse from "@/utils/parse";
+import { Form, Emitter, Screen } from "@/mixins";
 import { __inst } from "@/global";
-import Emitter from "@/mixins/emitter";
-import Screen from "@/mixins/screen";
-import cloneDeep from "clone-deep";
 
 export default {
 	name: "cl-form",
 	componentName: "ClForm",
-	mixins: [Emitter, Screen],
+	mixins: [Emitter, Screen, Form],
 	props: {
 		// Bind value
 		value: {
@@ -26,7 +23,6 @@ export default {
 			saving: false,
 			loading: false,
 			form: {},
-
 			conf: {
 				on: {
 					open: null,
@@ -37,7 +33,6 @@ export default {
 					fullscreen: false,
 					"close-on-click-modal": false,
 					"append-to-body": true,
-					"destroy-on-close": true
 				},
 				op: {
 					hidden: false,
@@ -68,12 +63,6 @@ export default {
 				this.$emit("input", val);
 			}
 		}
-	},
-	created() {
-		Form.inject.call(this, {
-			form: this.form,
-			scope: "conf."
-		});
 	},
 	methods: {
 		open(options = {}) {
@@ -110,7 +99,7 @@ export default {
 			if (open) {
 				this.$nextTick(() => {
 					open(this.form, {
-						close: this.beforeClose,
+						close: this.close,
 						submit: this.submit,
 						done: this.done
 					});
@@ -118,21 +107,11 @@ export default {
 			}
 		},
 
-		beforeClose(action = "close") {
-			if (!this.visible) {
-				return false;
-			}
-
-			// Close event
-			const done = () => {
-				this.close();
-			};
-
-			// Hooks event
+		beforeClose() {
 			if (this.conf.on.close) {
-				this.conf.on.close(action, done);
+				this.conf.on.close(this.close);
 			} else {
-				done();
+				this.close()
 			}
 		},
 
@@ -147,8 +126,10 @@ export default {
 		},
 
 		clear() {
-			this.clearForm();
-			this.$refs["form"].clearValidate();
+			for (let i in this.form) {
+				delete this.form[i]
+			}
+			this.clearForm()
 		},
 
 		submit() {
@@ -176,9 +157,7 @@ export default {
 
 						submit(d, {
 							done: this.done,
-							close: () => {
-								this.beforeClose("submit");
-							},
+							close: this.close,
 							$refs
 						});
 					} else {
@@ -320,76 +299,75 @@ export default {
 			const { size = "small" } = this.conf.props;
 
 			return (
-				<div class="cl-form__footer">
-					{!hidden &&
-						layout.map((vnode) => {
-							if (vnode == "save") {
-								return (
-									<el-button
-										{...{
-											props: {
-												size,
-												type: "success",
-												disabled: this.loading,
-												loading: this.saving
-											},
-											on: {
-												click: this.submit
-											}
-										}}>
-										{saveButtonText}
-									</el-button>
-								);
-							} else if (vnode == "close") {
-								return (
-									<el-button
-										{...{
-											props: {
-												size
-											},
-											on: {
-												click: () => {
-													this.beforeClose(vnode);
-												}
-											}
-										}}>
-										{closeButtonText}
-									</el-button>
-								);
-							} else {
-								return renderNode(vnode, {
-									scope: this.form,
-									$scopedSlots: this.$scopedSlots
-								});
-							}
-						})}
-				</div>
+				!hidden &&
+				layout.map((vnode) => {
+					if (vnode == "save") {
+						return (
+							<el-button
+								{...{
+									props: {
+										size,
+										type: "success",
+										disabled: this.loading,
+										loading: this.saving
+									},
+									on: {
+										click: this.submit
+									}
+								}}>
+								{saveButtonText}
+							</el-button>
+						);
+					} else if (vnode == "close") {
+						return (
+							<el-button
+								{...{
+									props: {
+										size
+									},
+									on: {
+										click: this.beforeClose
+									}
+								}}>
+								{closeButtonText}
+							</el-button>
+						);
+					} else {
+						return renderNode(vnode, {
+							scope: this.form,
+							$scopedSlots: this.$scopedSlots
+						});
+					}
+				})
 			);
 		}
 	},
 
 	render() {
-		let { props, hdr } = this.conf;
+		const { props, hdr } = this.conf;
 
 		return (
 			<div class="cl-form">
 				<cl-dialog
 					visible={this.visible}
-					title={props.title}
-					opList={hdr.opList}
 					{...{
 						props: {
-							props
+							title: props.title,
+							opList: hdr.opList,
+							props: {
+								...props,
+								'before-close': this.beforeClose
+							}
 						},
 						on: {
-							close: () => {
-								this.beforeClose("close");
-							},
-							"update:props:fullscreen": (f) => (props.fullscreen = f)
+							'update:visible': (v) => (this.visible = v),
+							"update:props:fullscreen": (v) => (props.fullscreen = v)
 						}
 					}}>
 					<div class="cl-form__container">{this.formRender()}</div>
-					<template slot="footer">{this.footerRender()}</template>
+					<div class="cl-form__footer" slot="footer">
+						{this.footerRender()}
+					</div>
 				</cl-dialog>
 			</div>
 		);

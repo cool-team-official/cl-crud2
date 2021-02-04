@@ -1,6 +1,6 @@
 import { renderNode } from "@/utils/vnode";
 import { isNull } from "@/utils";
-import Emitter from "@/mixins/emitter";
+import { Emitter } from "@/mixins";
 
 export default {
 	name: "cl-table",

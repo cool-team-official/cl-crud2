@@ -156,7 +156,8 @@
 					v-bind="dialog.props"
 					v-on="dialog.on"
 				>
-					自定义对话框
+					<p>自定义对话框</p>
+					<test></test>
 				</cl-dialog>
 			</cl-crud>
 		</div>
@@ -226,7 +227,7 @@
 			];
 
 			const testService = {
-				page: (p) => {
+				page: p => {
 					console.log("GET[page]", p);
 					return Promise.resolve({
 						list: userList,
@@ -237,26 +238,26 @@
 						}
 					});
 				},
-				info: (d) => {
+				info: d => {
 					console.log("GET[info]", d);
-					return new Promise((resolve) => {
+					return new Promise(resolve => {
 						resolve({
 							id: 1,
-							name: "icssoa",
+							name: d.id,
 							price: 100,
 							ids: "0,3,2"
 						});
 					});
 				},
-				add: (d) => {
+				add: d => {
 					console.log("POST[add]", d);
 					return Promise.resolve();
 				},
-				delete: (d) => {
+				delete: d => {
 					console.log("POST[delete]", d);
 					return Promise.resolve();
 				},
-				update: (d) => {
+				update: d => {
 					console.log("POST[update]", d);
 					return Promise.resolve();
 				}
@@ -283,6 +284,25 @@
 				}
 			});
 
+			Vue.component("test", {
+				data() {
+					return {
+						text: ""
+					};
+				},
+
+				mounted() {
+					console.log("test load");
+					setInterval(() => {
+						this.text = Math.random();
+					}, 1000);
+				},
+
+				render(h) {
+					return h("p", this.text);
+				}
+			});
+
 			new Vue({
 				el: "#app",
 
@@ -293,7 +313,7 @@
 						},
 						table: {
 							on: {
-								"row-click": (row) => {
+								"row-click": row => {
 									console.log("行点击", row);
 								}
 							},
@@ -379,8 +399,8 @@
 									console.log("cl-upsert 打开", isEdit, data.name);
 								},
 
-								close(action) {
-									console.log("cl-upsert 关闭", action);
+								close() {
+									console.log("cl-upsert 关闭");
 								}
 							},
 							props: {
@@ -393,8 +413,8 @@
 									console.log("cl-upsert 打开钩子", isEdit, data);
 								},
 
-								onClose(action, done) {
-									console.log("cl-upsert 关闭钩子", action);
+								onClose(done) {
+									console.log("cl-upsert 关闭钩子");
 									done();
 								},
 
@@ -537,20 +557,29 @@
 						dialog: {
 							visible: false,
 							props: {
-								title: "自定义对话框"
+								title: "自定义对话框",
+								props: {
+									"before-close"(done) {
+										console.log("dialog before-close");
+
+										setTimeout(() => {
+											done();
+										}, 300);
+									}
+								}
 							},
 							on: {
 								open() {
-									console.log("open");
+									console.log("dialog open");
 								},
 								closed() {
-									console.log("closed");
+									console.log("dialog closed");
 								},
 								opened() {
-									console.log("opened");
+									console.log("dialog opened");
 								},
 								close() {
-									console.log("close");
+									console.log("dialog close");
 								}
 							}
 						}
@@ -561,6 +590,8 @@
 					openForm() {
 						const { open, setForm } = this.$refs["form"];
 
+						const rd = Math.random();
+
 						open({
 							props: {
 								title: "自定义表单",
@@ -569,17 +600,14 @@
 							},
 							form: {
 								qs: [1],
-								_name: "羊姜"
+								_name: "羊姜" + rd
 							},
 							items: [
 								{
 									label: "表单名称",
 									prop: "name",
 									component: {
-										name: "el-input"
-									},
-									rules: {
-										required: true
+										name: "test"
 									}
 								},
 								{
@@ -625,7 +653,7 @@
 									component: {
 										name: "el-select",
 										on: {
-											change: (v) => {
+											change: v => {
 												setForm("name", v);
 											}
 										},
@@ -852,16 +880,16 @@
 							],
 							on: {
 								open: (data, { close, submit, done }) => {
-									console.log("cl-form 打开钩子", data);
+									console.log("cl-form open", data);
 								},
 
-								close(action, done) {
-									console.log("cl-form 关闭钩子", action);
+								close(done) {
 									done();
+									console.log("cl-form close");
 								},
 
 								submit: (data, { close, done, next }) => {
-									console.log("cl-form 提交钩子", data);
+									console.log("cl-form submit", data);
 
 									setTimeout(() => {
 										this.$message.success("提交成功");

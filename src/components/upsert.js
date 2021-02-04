@@ -1,4 +1,4 @@
-import Emitter from "@/mixins/emitter";
+import { Emitter } from "@/mixins";
 import { __inst } from "@/global";
 
 export default {
@@ -217,7 +217,7 @@ export default {
 							resolve();
 						},
 						submit: this.submit,
-						close: this.close
+						close: this.beforeClose
 					},
 					_data: {
 						isEdit: this.isEdit
@@ -227,20 +227,17 @@ export default {
 		},
 
 		// Close
-		close(action = "close") {
-			const done = () => {
-				this.$refs["form"].close();
-				this.$emit("close", action);
-			};
+		close() {
+			this.$refs["form"].close();
+			this.$emit("close");
+		},
 
-			if (action === "submit") {
-				done();
+		// Before close
+		beforeClose() {
+			if (this.onClose) {
+				this.onClose(this.close);
 			} else {
-				if (this.onClose) {
-					this.onClose(action, done);
-				} else {
-					done();
-				}
+				this.close();
 			}
 		},
 

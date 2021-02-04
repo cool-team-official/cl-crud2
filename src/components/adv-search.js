@@ -1,15 +1,13 @@
-import { renderNode } from "@/utils/vnode";
 import { cloneDeep } from "@/utils";
-import Emitter from "@/mixins/emitter";
-import Screen from '@/mixins/screen'
-import Form from "@/utils/form";
+import { renderNode } from "@/utils/vnode";
 import Parse from "@/utils/parse";
+import { Form, Emitter, Screen } from "@/mixins";
 
 export default {
 	name: "cl-adv-search",
 	componentName: "ClAdvSearch",
 	inject: ["crud"],
-	mixins: [Emitter],
+	mixins: [Emitter, Screen, Form],
 	props: {
 		// Bind value
 		value: {
@@ -42,7 +40,6 @@ export default {
 		// Hooks by search { data, { next, close } }
 		onSearch: Function
 	},
-	mixins: [Screen],
 	data() {
 		return {
 			form: {},
@@ -54,6 +51,7 @@ export default {
 			immediate: true,
 			deep: true,
 			handler(val) {
+				console.log(val)
 				this.form = val;
 			}
 		}
@@ -61,10 +59,6 @@ export default {
 	created() {
 		this.$on("crud.open", this.open);
 		this.$on("crud.close", this.close);
-
-		Form.inject.call(this, {
-			form: this.form
-		});
 	},
 	methods: {
 		// Open drawer
@@ -111,16 +105,16 @@ export default {
 
 		// Reset data
 		reset() {
-			this.items.map((e) => {
-				this.form[e.prop] = e.value;
-			});
-
+			this.resetForm()
 			this.$emit("reset");
 		},
 
 		// Clear data
 		clear() {
-			this.clearForm();
+			for (let i in this.form) {
+				this.form[i] = undefined
+			}
+			this.clearForm()
 			this.$emit("clear");
 		},
 

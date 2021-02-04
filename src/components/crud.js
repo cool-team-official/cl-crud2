@@ -1,7 +1,7 @@
 import { deepMerge, isArray, isString, isObject, isFunction } from "@/utils";
 import { bootstrap } from "@/app";
 import { __inst, __crud } from "@/global";
-import Emitter from "@/mixins/emitter";
+import { Emitter } from "@/mixins";
 
 require("@/assets/css/index.styl");
 
@@ -125,7 +125,7 @@ export default {
 		}
 
 		// Window onresize
-		window.removeEventListener("resize", function () {});
+		window.removeEventListener("resize", function () { });
 		window.addEventListener("resize", () => {
 			this.doLayout();
 		});

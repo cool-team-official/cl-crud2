@@ -1,6 +1,6 @@
 import { renderNode } from "@/utils/vnode";
-import { isBoolean, throttle } from "@/utils";
-import Screen from '@/mixins/screen'
+import { isBoolean } from "@/utils";
+import { Screen } from '@/mixins'
 
 export default {
 	name: "cl-dialog",
@@ -34,6 +34,11 @@ export default {
 		hiddenOp: Boolean
 	},
 	mixins: [Screen],
+	data() {
+		return {
+			cacheKey: 0
+		}
+	},
 	watch: {
 		"props.fullscreen"(f) {
 			if (this.$el && this.$el.querySelector) {
@@ -72,24 +77,35 @@ export default {
 			}
 		}
 	},
-
 	methods: {
 		open() {
+			this.cacheKey++;
 			this.$emit("update:visible", true);
 			this.$emit("open");
 		},
 
-		opened() {
+		onOpened() {
 			this.$emit('opened')
 		},
 
-		// Avoid double close event
-		close: throttle(function () {
-			this.$emit("update:visible", false);
-			this.$emit("close");
-		}, 10),
+		beforeClose() {
+			if (this.props['before-close']) {
+				this.props['before-close'](this.close)
+			} else {
+				this.close()
+			}
+		},
 
-		closed() {
+		close() {
+			this.$emit("update:visible", false);
+		},
+
+		onClose() {
+			this.$emit("close");
+			this.close();
+		},
+
+		onClosed() {
 			this.$emit('closed')
 		},
 
@@ -99,6 +115,7 @@ export default {
 			this.$emit("update:props:fullscreen", this.props.fullscreen);
 		},
 
+		// Drag event
 		dragEvent() {
 			this.$nextTick(() => {
 				const dlg = this.$el.querySelector(".el-dialog");
@@ -221,6 +238,7 @@ export default {
 			});
 		},
 
+		// Header
 		headerRender() {
 			return this.hiddenOp ? null : (
 				<div
@@ -262,7 +280,7 @@ export default {
 							// Close
 							else if (vnode === "close") {
 								return (
-									<button class="close" on-click={this.close}>
+									<button class="close" on-click={this.beforeClose}>
 										<i class="el-icon-close" />
 									</button>
 								);
@@ -278,20 +296,9 @@ export default {
 				</div>
 			);
 		},
-
-		slotsRender() {
-			const { default: body = [], footer = [] } = this.$slots || {};
-
-			return {
-				body: body[0],
-				footer: footer[0]
-			};
-		}
 	},
 
 	render() {
-		const { body, footer } = this.slotsRender();
-
 		return (
 			<el-dialog
 				custom-class={`cl-dialog ${this.hiddenOp ? "hidden-header" : ""}`}
@@ -304,14 +311,21 @@ export default {
 					},
 					on: {
 						open: this.open,
-						close: this.close,
-						opened: this.opened,
-						closed: this.closed
+						opened: this.onOpened,
+						close: this.onClose,
+						closed: this.onClosed
 					}
 				}}>
+				{/* header */}
 				<template slot="title">{this.headerRender()}</template>
-				{body}
-				<template slot="footer">{footer}</template>
+				{/* container */}
+				<div class="cl-dialog__container" key={this.cacheKey}>
+					{this.$slots.default}
+				</div>
+				{/* footer */}
+				<div class="cl-dialog__footer" slot="footer">
+					{this.$slots.footer}
+				</div>
 			</el-dialog>
 		);
 	}
