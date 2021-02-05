@@ -265,13 +265,13 @@ export default {
 								// Show diff icon
 								if (this.props.fullscreen) {
 									return (
-										<button class="minimize" on-click={this.changeFullscreen}>
+										<button type="button" class="minimize" on-click={this.changeFullscreen}>
 											<i class="el-icon-minus" />
 										</button>
 									)
 								} else {
 									return (
-										<button class="maximize" on-click={this.changeFullscreen}>
+										<button type="button" class="maximize" on-click={this.changeFullscreen}>
 											<i class="el-icon-full-screen" />
 										</button>
 									)
@@ -280,7 +280,7 @@ export default {
 							// Close
 							else if (vnode === "close") {
 								return (
-									<button class="close" on-click={this.beforeClose}>
+									<button type="button" class="close" on-click={this.beforeClose}>
 										<i class="el-icon-close" />
 									</button>
 								);

@@ -33,6 +33,7 @@ yarn add cl-crud2
 
 ## Version
 
+-   0.4.1 处理 cl-dialog 关闭按钮点击刷新页面问题
 -   0.4.0 弃用 cl-dialog, destroy-on-close，改用 key 缓存
 -   0.3.8 添加 saveButtonText, closeButtonText 字典
 -   0.3.7 cl-upsert 添加 showLoading, hiddenLoading
